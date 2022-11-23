@@ -1,0 +1,28 @@
+variables:
+  MAVEN_DIRECTORY: /builds/$CI_PROJECT_PATH/maven
+
+cache: &global_cache
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - "${MAVEN_DIRECTORY}/repository"
+
+stages:
+  - build-and-publish
+
+before_script:
+  - docker info
+  - mkdir -p "$MAVEN_DIRECTORY/repository"
+  - cp "$XPANSIV_MAVEN_SETTINGS" "$MAVEN_DIRECTORY/settings.xml"
+
+build:
+  stage: build-and-publish
+  tags:
+    - docker
+  script:
+    - >
+      docker run
+      -v $(pwd):/app
+      -v ${MAVEN_DIRECTORY}:/root/.m2
+      --rm  kgignatyev/jdk8-maven-runner:3.6.3-3 mvn clean install deploy -Drelease=$CI_COMMIT_TAG
+  rules:
+    - if: $CI_COMMIT_TAG

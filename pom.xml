@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.xpansiv.workflows</groupId>
+    <artifactId>wf-assets-transfer</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
+        <junit.version>4.13.2</junit.version>
+        <kotlin.version>1.7.21</kotlin.version>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.xpansiv.demo</groupId>
+            <artifactId>fsm-transfer-assets</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.temporal</groupId>
+            <artifactId>temporal-sdk</artifactId>
+            <version>1.17.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.temporal</groupId>
+            <artifactId>temporal-testing</artifactId>
+            <version>1.17.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
+         <plugins>
+             <plugin>
+                 <groupId>org.jetbrains.kotlin</groupId>
+                 <artifactId>kotlin-maven-plugin</artifactId>
+                 <version>${kotlin.version}</version>
+                 <executions>
+                     <execution>
+                         <id>compile</id>
+                         <phase>compile</phase>
+                         <goals>
+                             <goal>compile</goal>
+                         </goals>
+                     </execution>
+                     <execution>
+                         <id>test-compile</id>
+                         <phase>test-compile</phase>
+                         <goals>
+                             <goal>test-compile</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+                 <configuration>
+                     <args>
+                         <arg>-Xjsr305=strict</arg>
+                     </args>
+                     <compilerPlugins>
+                         <plugin>spring</plugin>
+                     </compilerPlugins>
+                     <jvmTarget>1.8</jvmTarget>
+                 </configuration>
+                 <dependencies>
+                     <dependency>
+                         <groupId>org.jetbrains.kotlin</groupId>
+                         <artifactId>kotlin-maven-allopen</artifactId>
+                         <version>${kotlin.version}</version>
+                     </dependency>
+                 </dependencies>
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-surefire-plugin</artifactId>
+                 <version>3.0.0-M5</version>
+                 <configuration>
+                     <includes>
+                         <include>*Test.java</include>
+                     </includes>
+                 </configuration>
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-compiler-plugin</artifactId>
+                 <executions>
+                     <execution>
+                         <id>compile</id>
+                         <phase>compile</phase>
+                         <goals>
+                             <goal>compile</goal>
+                         </goals>
+                     </execution>
+                     <execution>
+                         <id>testCompile</id>
+                         <phase>test-compile</phase>
+                         <goals>
+                             <goal>testCompile</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+                 <configuration>
+                     <source>8</source>
+                     <target>8</target>
+                 </configuration>
+             </plugin>
+         </plugins>
+    </build>
+
+
+
+    <distributionManagement>
+        <repository>
+            <id>xpansiv-artifactory</id>
+            <name>artifactory-releases</name>
+            <url>https://xpansiv.jfrog.io/artifactory/default-maven-virtual</url>
+        </repository>
+        <snapshotRepository>
+            <id>xpansiv-artifactory</id>
+            <name>artifactory-snapshots</name>
+            <url>https://xpansiv.jfrog.io/artifactory/default-maven-virtual</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>
