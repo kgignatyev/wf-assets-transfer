@@ -9,16 +9,23 @@ import org.apache.commons.io.IOUtils
 import java.io.InputStreamReader
 import java.time.Duration
 
-@WorkflowInterface
-interface WFAssetsTransfer {
-    @WorkflowMethod
-    fun transferAssets(senderId:String, recipientId:String, ein:String, quantity:Long)
+//normally this will be a part of some common library used by other workflows
+interface VisualWF {
+    @QueryMethod
+    fun currentStateName():String
 
     @QueryMethod
     fun describeWorkflowInDot():String
 
     @QueryMethod
-    fun currentStateName():String
+    fun getFSMDefinition():String
+}
+
+@WorkflowInterface
+interface WFAssetsTransfer:VisualWF {
+    @WorkflowMethod
+    fun transferAssets(senderId:String, recipientId:String, ein:String, quantity:Long)
+
 
     @SignalMethod
     fun LockSenderFunds()
@@ -36,8 +43,8 @@ interface WFAssetsTransfer {
 
 
 object WFAssetsTransferConst {
-    val WF_TASKS_QUEUE = "asset_transfers_wf"
-    val TASKS_QUEUE = "asset_transfers_tasks"
+    const val WF_TASKS_QUEUE = "asset_transfers_wf"
+    const val TASKS_QUEUE = "asset_transfers_tasks"
 }
 
 @ActivityInterface
@@ -82,6 +89,10 @@ class WFAssetsTransferImpl(): WFAssetsTransfer {
 
     override fun describeWorkflowInDot(): String {
         return IOUtils.toString( InputStreamReader( this::class.java.classLoader.getResourceAsStream("com/xpansiv/demo/fsm/asset_transfer/TransferAssets_sm.dot")!!))
+    }
+
+    override fun getFSMDefinition(): String {
+        return IOUtils.toString( InputStreamReader( this::class.java.classLoader.getResourceAsStream("TransferAssets.sm")!!))
     }
 
     override fun LockSenderFunds(){

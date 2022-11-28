@@ -1,6 +1,5 @@
 package com.xpansiv.wf.assets_transfer
 
-import com.xpansiv.demo.fsm.asset_transfer.TransferAssetsContext
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowOptions
 import io.temporal.serviceclient.WorkflowServiceStubs
@@ -92,6 +91,8 @@ class WFAssetsTransferTest {
         val wfRuntimeStub = wfClient.newWorkflowStub(WFAssetsTransfer::class.java, wfID, Optional.empty())
         val dotDescription = wfRuntimeStub.describeWorkflowInDot()
         FileUtils.writeStringToFile( File("target/wf-description.dot"), dotDescription )
+        val smDescription = wfRuntimeStub.getFSMDefinition()
+        FileUtils.writeStringToFile( File("target/wf-description.sm"), smDescription )
         var counter = 1
         cpInfoSupplierTest._orgAutoApprovesTransfers = true
         awaitAndVisualizeState( wfRuntimeStub, "Main.STARTED", "without-approval-${counter++}")
