@@ -13,10 +13,8 @@ import java.time.Duration
 interface VisualWF {
     @QueryMethod
     fun currentStateName():String
-
     @QueryMethod
     fun describeWorkflowInDot():String
-
     @QueryMethod
     fun getFSMDefinition():String
 }
@@ -25,8 +23,6 @@ interface VisualWF {
 interface WFAssetsTransfer:VisualWF {
     @WorkflowMethod
     fun transferAssets(senderId:String, recipientId:String, ein:String, quantity:Long)
-
-
     @SignalMethod
     fun LockSenderFunds()
     @SignalMethod
