@@ -69,13 +69,13 @@ class WFAssetsTransferImpl(): WFAssetsTransfer {
 
     val terminalStates = hashSetOf("Main.DONE","Main.CANCELLED","Main.REJECTED")
 
-    private var signalHandled = false
+
 
     override fun transferAssets(senderId: String, recipientId: String, ein: String, quantity: Long) {
         dh = TransferAssetsHandlerExt(senderId, recipientId, ein, quantity, cpInfoSupplier)
         decisionContext = TransferAssetsContext(dh)
         while (! terminalStates.contains( decisionContext.state.name )){
-            Workflow.await{signalHandled}
+            Workflow.await{false}
         }
     }
 
